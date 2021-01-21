@@ -2,17 +2,6 @@ package com.welpnathan.networkserver.models;
 
 import com.google.gson.Gson;
 
-/**
- * A message is encoded as a JSON object with fields from (the sender of the
- * message), when (a non-negative integer serving as the timestamp when the
- * message was received by the server) and body (the text of the message).
- * {"_class":"Message", "from":"Bob", "when":47, "body":"Hello again!"}
- *
- * Beyond these fields, a message may have additional fields, such as the field
- * pic below (for a picture attachment, base64-encoded).
- * {"_class":"Message", "from":"Alice", "when":53, "body":"pic attached, base64 encoded,
- * LOL", "pic":"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAxlBMVEUAAADWAEX/"}
- */
 public class Message {
     private static final String _class = "Message";
     private final String from;
