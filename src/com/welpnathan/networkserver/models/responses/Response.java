@@ -2,11 +2,6 @@ package com.welpnathan.networkserver.models.responses;
 
 import com.google.gson.Gson;
 
-/**
- * Reference's an abstract Response class.
- * Contains all the methods that are shared
- * among the responses.
- */
 public abstract class Response {
     protected String _class;
 

@@ -1,12 +1,5 @@
 package com.welpnathan.networkserver.models.responses;
 
-/**
- * An Error response indicates that the request failed and provides a
- * reason why.
- * {"_class":"ErrorResponse", "error":"NO SUCH CHANNEL: Bob"}
- * {"_class":"ErrorResponse", "error":"MESSAGE TOO BIG: 1234 characters"}
- * {"_class":"ErrorResponse", "error":"INVALID REQUEST: [{]"}
- */
 public class ErrorResponse extends Response {
     private static final String _class = "ErrorResponse";
     private final String error;
