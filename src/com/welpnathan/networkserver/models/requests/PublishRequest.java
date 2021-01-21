@@ -21,7 +21,6 @@ public class PublishRequest extends Request {
 
     @Override
     public Response performRequest() {
-        networkState.addNewMessage();
         return null;
     }
 }

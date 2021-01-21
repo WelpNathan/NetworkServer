@@ -1,14 +1,12 @@
 package com.welpnathan.networkserver.models.requests;
 
 import com.google.gson.Gson;
-import com.welpnathan.networkserver.NetworkServer;
 import com.welpnathan.networkserver.NetworkState;
 import com.welpnathan.networkserver.models.responses.Response;
 
 public abstract class Request {
     protected String _class;
     protected String identity;
-    protected final NetworkState networkState = NetworkServer.getNetworkState();
 
     /**
      * Creates a new extended object of Request.

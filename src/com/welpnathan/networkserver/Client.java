@@ -1,0 +1,126 @@
+package com.welpnathan.networkserver;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.welpnathan.networkserver.models.requests.*;
+import com.welpnathan.networkserver.models.responses.Response;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Objects;
+import java.util.UUID;
+
+public class Client extends Thread {
+    private final UUID clientUuid;
+    private String clientIdentifier;
+    private final PrintWriter toClient;
+    private final BufferedReader fromClient;
+
+    /**
+     * Creates a new instance of Client.
+     * @param socket Client's socket connection
+     * @param clientUuid Unique client number
+     */
+    public Client(Socket socket, UUID clientUuid) throws IOException {
+        this.clientUuid = clientUuid;
+        toClient = new PrintWriter(socket.getOutputStream(), true);
+        fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
+
+    /**
+     * Get the client UUID.
+     * @return Client UUID
+     */
+    public UUID getClientUuid() {
+        return clientUuid;
+    }
+
+    /**
+     * Attempts to get the RequestType from a JSON string.
+     * @param inputLine JSON string from client
+     * @return Type of request
+     */
+    private String getRequestType(String inputLine) {
+        JsonObject obj = new Gson().fromJson(inputLine, JsonObject.class);
+        JsonElement classType = obj.get("_class");
+        return classType == null ? null : classType.getAsString();
+    }
+
+    /**
+     * Sets the client identifier.
+     * TODO: Open up channel if exists from this identifier.
+     * @param identifier Client's identifier.
+     */
+    private void setClientIdentifier(String identifier) {
+        this.clientIdentifier = identifier;
+    }
+
+    /**
+     * Handles what the client has sent to the server.
+     * This essentially performs different actions depending
+     * on the request type.
+     * @param inputLine JSON string from client
+     * @return Type of request
+     */
+    private Response handleRequest(String inputLine) {
+        String requestType = getRequestType(inputLine);
+
+        // create new gson object to convert json to object
+        Gson gson = new Gson();
+
+        // perform different actions depending on request type
+        return switch (Objects.requireNonNull(requestType)) {
+            case "GetRequest" -> {
+                Request request = gson.fromJson(inputLine, GetRequest.class);
+                yield request.performRequest();
+            }
+            case "OpenRequest" -> {
+                Request request = gson.fromJson(inputLine, OpenRequest.class);
+                yield request.performRequest();
+            }
+            case "PublishRequest" -> {
+                Request request = gson.fromJson(inputLine, PublishRequest.class);
+                yield request.performRequest();
+            }
+            case "SubscribeRequest" -> {
+                Request request = gson.fromJson(inputLine, SubscribeRequest.class);
+                yield request.performRequest();
+            }
+            case "UnsubscribeRequest" -> {
+                Request request = gson.fromJson(inputLine, UnsubscribeRequest.class);
+                yield request.performRequest();
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + Objects.requireNonNull(requestType));
+        };
+    }
+
+    /**
+     * Constantly waits for client data and then handles it
+     * respectively depending on the type of request.
+     */
+    public void run() {
+        try {
+            // wait until the client sends us data
+            String inputLine;
+            while ((inputLine = fromClient.readLine()) != null) {
+                System.out.println("[I] " + clientUuid + " | " + inputLine);
+
+                // get response to return to client
+                Response clientResponse = handleRequest(inputLine);
+
+                // get response in json format
+                String clientJson = clientResponse.toJson();
+                System.out.println("[O] " + clientUuid + " | " + clientJson);
+
+                // respond to client via stream using JSON
+                toClient.println(clientJson);
+            }
+        } catch (IOException e) {
+            System.out.println("[E] " + clientUuid + " | " + e.getMessage());
+        }
+    }
+}
