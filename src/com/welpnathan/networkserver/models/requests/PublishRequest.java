@@ -1,17 +1,27 @@
 package com.welpnathan.networkserver.models.requests;
 
-/**
- * A Publish request publishes a message on the client's channel. The
- * timestamp of the message is ignored; the server will issue its own
- * timestamp for the message when storing it. The request fails if the
- * channel does not exist or if the message is too big.
- * {"_class":"PublishRequest", "identity":"Alice", "message":{"_class":"Message",
- * "from":"Bob", "when":0, "body":"Hello again!"}}
- */
+import com.welpnathan.networkserver.models.Message;
+import com.welpnathan.networkserver.models.responses.Response;
+
 public class PublishRequest extends Request {
     private static final String _class = "PublishRequest";
+    private final Message message;
 
-    public PublishRequest(String identity) {
+    /**
+     * Creates a new instance of PublishRequest.
+     * Used for publishing a message to the client's
+     * channel.
+     * @param identity Client's identity
+     * @param message Client message
+     */
+    public PublishRequest(String identity, Message message) {
         super(_class, identity);
+        this.message = message;
+    }
+
+    @Override
+    public Response performRequest() {
+        networkState.addNewMessage();
+        return null;
     }
 }
