@@ -1,7 +1,6 @@
 package com.welpnathan.networkserver.models.requests;
 
-import com.google.gson.Gson;
-import com.welpnathan.networkserver.NetworkState;
+import com.welpnathan.networkserver.NetworkClient;
 import com.welpnathan.networkserver.models.responses.Response;
 
 public abstract class Request {
@@ -19,16 +18,9 @@ public abstract class Request {
     }
 
     /**
-     * Converts the extended object to a JSON string format.
-     * @return JSON String
-     */
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
-
-    /**
      * Returns a response from the request.
      * @return Response to return to client
+     * @param networkClient Client object
      */
-    public abstract Response performRequest();
+    public abstract Response performRequest(NetworkClient networkClient);
 }

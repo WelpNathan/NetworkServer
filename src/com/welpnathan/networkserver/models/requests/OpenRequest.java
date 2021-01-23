@@ -1,5 +1,7 @@
 package com.welpnathan.networkserver.models.requests;
 
+import com.welpnathan.networkserver.NetworkClient;
+import com.welpnathan.networkserver.NetworkServer;
 import com.welpnathan.networkserver.models.responses.Response;
 import com.welpnathan.networkserver.models.responses.SuccessResponse;
 
@@ -9,7 +11,7 @@ public class OpenRequest extends Request {
     /**
      * Creates a new instance of OpenRequest.
      * Used for establishing a client's identity and
-     * creating a channel by that name.
+     * creates a NetworkState channel by that name.
      * @param identity Client's identity
      */
     public OpenRequest(String identity) {
@@ -17,7 +19,10 @@ public class OpenRequest extends Request {
     }
 
     @Override
-    public Response performRequest() {
-        return null;
+    public Response performRequest(NetworkClient networkClient) {
+        networkClient.setClientIdentity(identity);
+        NetworkServer.getNetworkState().addChannelIfNotExist(identity);
+        networkClient.addChannelSubscription(identity);
+        return new SuccessResponse();
     }
 }

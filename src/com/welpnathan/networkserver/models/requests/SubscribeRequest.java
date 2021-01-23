@@ -1,6 +1,9 @@
 package com.welpnathan.networkserver.models.requests;
 
+import com.welpnathan.networkserver.NetworkClient;
+import com.welpnathan.networkserver.models.responses.ErrorResponse;
 import com.welpnathan.networkserver.models.responses.Response;
+import com.welpnathan.networkserver.models.responses.SuccessResponse;
 
 public class SubscribeRequest extends Request {
     private static final String _class = "SubscribeRequest";
@@ -18,7 +21,10 @@ public class SubscribeRequest extends Request {
     }
 
     @Override
-    public Response performRequest() {
-        return null;
+    public Response performRequest(NetworkClient networkClient) {
+        boolean success = networkClient.addChannelSubscription(channel);
+        return success
+                ? new SuccessResponse()
+                : new ErrorResponse("Channel does not exist or you're already subscribed.");
     }
 }

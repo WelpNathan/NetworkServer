@@ -15,20 +15,20 @@ public class NetworkServer {
      * client's assigned socket.
      * @param clientSocket Client's socket
      */
-    private static Client createNewClient(Socket clientSocket) {
+    private static NetworkClient createNewClient(Socket clientSocket) {
         UUID clientUuid = UUID.randomUUID();
         System.out.println("New client detected. Assigned client UUID " + clientUuid + ".");
 
         // attempt to create a new client from ClientHandler
-        Client client = null;
+        NetworkClient networkClient = null;
         try {
-            client = new Client(clientSocket, clientUuid);
+            networkClient = new NetworkClient(clientSocket, clientUuid);
         } catch (IOException e) {
             System.out.println("Unable to add client" + clientUuid + " to the server.");
             e.printStackTrace();
         }
 
-        return client;
+        return networkClient;
     }
 
     /**
@@ -52,8 +52,8 @@ public class NetworkServer {
             // client from that socket connection
             while (true) {
                 Socket socket = serverSocket.accept();
-                Client client = createNewClient(socket);
-                networkState.registerNewClient(client); // initialise thread
+                NetworkClient networkClient = createNewClient(socket);
+                networkState.registerNewClient(networkClient); // initialise thread
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");

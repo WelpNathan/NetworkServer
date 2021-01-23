@@ -3,9 +3,9 @@ package com.welpnathan.networkserver.models;
 import com.google.gson.Gson;
 
 public class Message {
-    private static final String _class = "Message";
+    private final String _class = "Message";
     private final String from;
-    private final int when;
+    private int when;
     private final String body;
 
     /**
@@ -28,5 +28,29 @@ public class Message {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    /**
+     * Sets the message's timestamp.
+     * @param timestamp New timestamp
+     */
+    public void setTimestamp(int timestamp) {
+        when = timestamp;
+    }
+
+    /**
+     * Returns the message's timestamp.
+     * @return Message timestamp
+     */
+    public int getTimestamp() {
+        return when;
+    }
+
+    /**
+     * Returns the message's body.
+     * @return Message body
+     */
+    public String getBody() {
+        return body;
     }
 }
