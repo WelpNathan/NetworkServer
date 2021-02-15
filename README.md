@@ -31,7 +31,7 @@ The application is split up into three main sections.
 
 ## Persistence Extension
 - Persistence is implemented via the use of **SQLite**. It creates `data.db` to store messages and channels.
-- The application uses interfaces `IDbConnection` to allow more databases in the future.
+- The application uses an interface `IDbConnection` to allow more databases such as MySQL to be developed.
 
 ## Compiling and Running the NetworkServer.
 Again, this was created via `OpenJDK 15.0.2` which uses new features such as `switch yeilding`.
