@@ -15,6 +15,12 @@ public class Channel {
     }
 
     /**
+     * Returns the name of the channel.
+     * @return Name of channel
+     */
+    public String getName() { return name; }
+
+    /**
      * Adds a new message to the channel.
      * @param message Message object
      */
