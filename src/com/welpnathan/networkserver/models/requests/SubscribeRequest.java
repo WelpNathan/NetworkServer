@@ -25,6 +25,6 @@ public class SubscribeRequest extends Request {
         boolean success = networkClient.addChannelSubscription(channel);
         return success
                 ? new SuccessResponse()
-                : new ErrorResponse("Channel does not exist or you're already subscribed.");
+                : new ErrorResponse("Channel does not exist.");
     }
 }

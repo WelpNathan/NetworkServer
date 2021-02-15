@@ -1,5 +1,7 @@
 package com.welpnathan.networkserver;
 
+import com.welpnathan.networkserver.data.DbConnection;
+import com.welpnathan.networkserver.data.IDbConnection;
 import com.welpnathan.networkserver.models.Channel;
 import com.welpnathan.networkserver.models.Message;
 
@@ -12,13 +14,25 @@ public class NetworkState {
 
     // reference's the channels available with string
     // being the channel's name
-    private final HashMap<String, Channel> channels = new HashMap<>();
+    private final HashMap<String, Channel> channels;
+
+    // reference's the network state's database
+    private final IDbConnection database;
 
     // reference's the current message timestamp
-    private int currentTimestamp = 0;
+    private int currentTimestamp;
 
     // reference's how many characters can be in the body and extra fields combined
-    private static int MESSAGE_LIMIT = 1000;
+    private final static int MESSAGE_LIMIT = 1000;
+
+    /**
+     * Creates a new instance of NetworkState.
+     */
+    public NetworkState() {
+        database = new DbConnection();
+        currentTimestamp = database.getLastMessageTimestamp();
+        channels = database.getChannelData();
+    }
 
     /**
      * Adds a new client to the network and
@@ -37,6 +51,7 @@ public class NetworkState {
     public synchronized void addChannelIfNotExist(String channelName) {
         if (!doesChannelExist(channelName)) {
             channels.put(channelName, new Channel(channelName));
+            database.addChannel(channelName);
         }
     }
 
@@ -49,12 +64,13 @@ public class NetworkState {
     public synchronized boolean addMessageToChannel(String channelName, Message message) {
         if (!doesChannelExist(channelName)) return false;
 
-        // TODO: calculate if extra fields are over the variable
         if (message.getBody().length() > MESSAGE_LIMIT) return false;
 
         message.setTimestamp(currentTimestamp);
+        database.addMessageToChannel(channelName, message);
         currentTimestamp++;
         channels.get(channelName).addMessage(message);
+
         return true;
     }
 

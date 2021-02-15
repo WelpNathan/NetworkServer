@@ -20,7 +20,6 @@ public class OpenRequest extends Request {
 
     @Override
     public Response performRequest(NetworkClient networkClient) {
-        networkClient.setClientIdentity(identity);
         NetworkServer.getNetworkState().addChannelIfNotExist(identity);
         networkClient.addChannelSubscription(identity);
         return new SuccessResponse();

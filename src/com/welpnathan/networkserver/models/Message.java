@@ -22,15 +22,6 @@ public class Message {
     }
 
     /**
-     * Converts the message to a JSON string format.
-     * @return JSON String
-     */
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    /**
      * Sets the message's timestamp.
      * @param timestamp New timestamp
      */

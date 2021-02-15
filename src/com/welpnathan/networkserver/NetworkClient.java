@@ -12,12 +12,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
 public class NetworkClient extends Thread {
     private final UUID uuid;
-    private String identity;
     private final PrintWriter toClient;
     private final BufferedReader fromClient;
     private final ArrayList<String> channelSubscriptions = new ArrayList<>();
@@ -45,10 +45,7 @@ public class NetworkClient extends Thread {
     }
 
     public UUID getUuid() { return uuid; }
-    public String getIdentity() { return identity; }
     public ArrayList<String> getChannelSubscriptions() { return channelSubscriptions; }
-
-    public void setClientIdentity(String identity) { this.identity = identity; }
 
 
     /**
@@ -60,8 +57,8 @@ public class NetworkClient extends Thread {
         if (NetworkServer.getNetworkState().doesChannelExist(channelName)) {
             if (!channelSubscriptions.contains(channelName)) {
                 channelSubscriptions.add(channelName);
-                return true;
             }
+            return true;
         }
         return false;
     }
@@ -86,7 +83,10 @@ public class NetworkClient extends Thread {
      * @return Type of request
      */
     private Response handleRequest(String inputLine) {
-        String requestType = getRequestType(inputLine);
+        String decoded = new String(Base64.getDecoder().decode(inputLine));
+        // System.out.println("[D] " + uuid + " | " + decoded);
+
+        String requestType = getRequestType(decoded);
 
         // create new gson object to convert json to object
         Gson gson = new Gson();
@@ -94,23 +94,23 @@ public class NetworkClient extends Thread {
         // perform different actions depending on request type
         return switch (Objects.requireNonNull(requestType)) {
             case "GetRequest" -> {
-                Request request = gson.fromJson(inputLine, GetRequest.class);
+                Request request = gson.fromJson(decoded, GetRequest.class);
                 yield request.performRequest(this);
             }
             case "OpenRequest" -> {
-                Request request = gson.fromJson(inputLine, OpenRequest.class);
+                Request request = gson.fromJson(decoded, OpenRequest.class);
                 yield request.performRequest(this);
             }
             case "PublishRequest" -> {
-                Request request = gson.fromJson(inputLine, PublishRequest.class);
+                Request request = gson.fromJson(decoded, PublishRequest.class);
                 yield request.performRequest(this);
             }
             case "SubscribeRequest" -> {
-                Request request = gson.fromJson(inputLine, SubscribeRequest.class);
+                Request request = gson.fromJson(decoded, SubscribeRequest.class);
                 yield request.performRequest(this);
             }
             case "UnsubscribeRequest" -> {
-                Request request = gson.fromJson(inputLine, UnsubscribeRequest.class);
+                Request request = gson.fromJson(decoded, UnsubscribeRequest.class);
                 yield request.performRequest(this);
             }
             default -> throw new IllegalStateException("Unexpected value: " + Objects.requireNonNull(requestType));
@@ -126,17 +126,20 @@ public class NetworkClient extends Thread {
             // wait until the client sends us data
             String inputLine;
             while ((inputLine = fromClient.readLine()) != null) {
-                System.out.println("[I] " + uuid + " | " + inputLine);
+                // System.out.println("[I] " + uuid + " | " + inputLine);
 
                 // get response to return to client
                 Response clientResponse = handleRequest(inputLine);
 
                 // get response in json format
                 String clientJson = clientResponse.toJson();
-                System.out.println("[O] " + uuid + " | " + clientJson);
+                // System.out.println("[O-NO-ENCODING] " + uuid + " | " + clientJson);
+
+                String encoded = new String(Base64.getEncoder().encode(clientJson.getBytes()));
+                // System.out.println("[O-ENCODED] " + uuid + " | " + encoded);
 
                 // respond to client via stream using JSON
-                toClient.println(clientJson);
+                toClient.println(encoded);
             }
         } catch (IOException e) {
             System.out.println("[E] " + uuid + " | " + e.getMessage());

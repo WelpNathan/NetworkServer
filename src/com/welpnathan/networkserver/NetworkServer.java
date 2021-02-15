@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @SuppressWarnings("InfiniteLoopStatement")
 public class NetworkServer {
-    private static final int portNumber = 12345;
+    private static final int PORT_NUMBER = 12345;
     private static final NetworkState networkState = new NetworkState();
 
     /**
@@ -44,9 +44,11 @@ public class NetworkServer {
      * and client connections.
      */
     public static void main(String[] args) {
+        System.out.println("[YAY] Initialisation completed. Now listening at localhost:" + PORT_NUMBER);
+
         try {
             // open a new socket with the specified port number
-            ServerSocket serverSocket = new ServerSocket(portNumber);
+            ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
 
             // constantly await client socket connections and create new
             // client from that socket connection
@@ -56,8 +58,8 @@ public class NetworkServer {
                 networkState.registerNewClient(networkClient); // initialise thread
             }
         } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
+            throw new RuntimeException("Exception caught when trying to listen on port " + PORT_NUMBER + " or listening for a connection.");
         }
     }
 }
