@@ -35,13 +35,13 @@ The application is split up into three main sections.
 
 ## Compiling and Running the NetworkServer.
 Again, this was created via `OpenJDK 15.0.2` which uses new features such as a more modern switch statement that was released in `Java 14`.
-**Compiling NetworkServer**: 
+### Compiling NetworkServer
 Ensure your `java` command links to `OpenJDK 15.0.2`.
 ```
 javac -cp ".;lib/gson-2.8.6.jar;lib/sqlite-jdbc-3.34.0.jar" src/com/welpnathan/networkserver/*.java src/com/welpnathan/networkserver/data/*.java src/com/welpnathan/networkserver/models/*.java src/com/welpnathan/networkserver/models/requests/*.java src/com/welpnathan/networkserver/models/responses/*.java
 ```
 
-**Running NetworkServer**: 
+### Running NetworkServer 
 Ensure your `java` command links to `OpenJDK 15.0.2`.
 ```
 java -cp "src;lib/gson-2.8.6.jar;lib/sqlite-jdbc-3.34.0.jar" com/welpnathan/networkserver/NetworkServer
