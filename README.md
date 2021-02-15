@@ -34,7 +34,7 @@ The application is split up into three main sections.
 - The application uses an interface `IDbConnection` to allow more databases such as MySQL to be developed.
 
 ## Compiling and Running the NetworkServer.
-Again, this was created via `OpenJDK 15.0.2` which uses new features such as `switch yeilding`.
+Again, this was created via `OpenJDK 15.0.2` which uses new features such as a more modern switch statement that was released in `Java 14`.
 **Compiling NetworkServer**: 
 Ensure your `java` command links to `OpenJDK 15.0.2`.
 ```
