@@ -49,13 +49,13 @@ java -cp "src;lib/gson-2.8.6.jar;lib/sqlite-jdbc-3.34.0.jar" com/welpnathan/netw
 
 ## Compiling and Running the TestClient
 TestClient is a university supplied program and so I'm not entirely sure what version it was designed for. I was able to run it using `OpenJDK 15.0.2` without any issues.
-**Compiling TestClient**
+### Compiling TestClient
 Ensure your `java` command links to `OpenJDK 15.0.2`.
 ```
 javac -classpath ".;.\json-simple-1.1.1.jar" *.java
 ```
 
-**Running TestClient**
+### Running TestClient
 Ensure your `java` command links to `OpenJDK 15.0.2`.
 ```
 java -classpath ".;.\json-simple-1.1.1.jar" DemoClient localhost 12345 1 R
