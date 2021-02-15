@@ -1,5 +1,6 @@
 # Project exclude paths
 /out/
+data.db
 
 # Compiled class file
 *.class
