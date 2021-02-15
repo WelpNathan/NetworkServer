@@ -6,12 +6,12 @@ The application was created via `OpenJDK 15.0.2`. Other JDKs, **especially** low
 
 ## Contents of Archive
 The application is split up into three main sections.
-- **lib**: contains all required libraries for application. i.e GSON and SQLite driver
+- **lib**: contains all required libraries for application. i.e `GSON` and `SQLite` driver
 - **src**: contains source code for the application.
     - **com/welpnathan/networkserver**: main package
         - **data**: contains database connection code
             - **DbConnection**: SQLite database connection code
-            - **IDbConnection**: interface to allow other databases such as MySQL
+            - **IDbConnection**: interface to allow other databases such as `MySQL`
         - **models**: contains models of data
             - **requests**: contains request code
                 - **GetRequest**: request messages from a specific timestamp
