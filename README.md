@@ -57,6 +57,9 @@ javac -classpath ".;.\json-simple-1.1.1.jar" *.java
 
 ### Running TestClient
 Ensure your `java` command links to `OpenJDK 15.0.2`.
+- **R**: All messages work for one client
+- **L**: 2 or 3 clients publish and read 10 messages. The clients are rate-limited to at most 1 request per second.
+- **H**: 10 clients publish and read at least 1000 messages at an unlimited rate (i.e. they issues request as fast as they can). 
 ```
 java -classpath ".;.\json-simple-1.1.1.jar" DemoClient localhost 12345 1 R
 java -classpath ".;.\json-simple-1.1.1.jar" DemoClient localhost 12345 1 L
