@@ -1,5 +1,6 @@
 # NetworkServer
 Simple publish-subscribe server for SHU Networked Software Development module. Second-year project. Powered by Java and GSON.
+Final project grade: **88/100 (1st class)**
 
 ## Important Notice
 The application was created via `OpenJDK 15.0.2`. Other JDKs, **especially** lower versions may not work with the program.
